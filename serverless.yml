@@ -1,0 +1,48 @@
+service:
+  name: sls-project1
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+  iamRoleStatements:
+    - ${file(serverless_modules/iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+  
+functions:
+  createAuction:
+    handler: src/handlers/createAuctions.handler
+    events:
+      - http:
+          method: POST
+          path: /auctions
+  getAuctions:
+    handler: src/handlers/getAuctions.handler
+    events:
+      - http:
+          method: GET
+          path: /auctions
+  getAuction:
+    handler: src/handlers/getAuction.handler
+    events:
+      - http:
+          method: GET
+          path: /auction/{id}
+
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn:  !GetAtt AuctionsTable.Arn
+  bundle:
+    linting: false
+
+resources:
+  Resources:
+    AuctionsTable: ${file(serverless_modules/resources/AuctionsTable.yml):AuctionsTable}
