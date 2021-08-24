@@ -1,7 +1,7 @@
 POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 
 {
-    "title": "New Auction"
+    "title": "New Auction 1"
 }
 
 
@@ -9,4 +9,13 @@ POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 
 ###
-GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/083349d0-4878-4c32-afdc-c30931a00a13
+GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/d3db964b-a3a6-4436-a40c-99d36cb3ed04
+
+###
+
+PATCH https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/d3db964b-a3a6-4436-a40c-99d36cb3ed04/bid
+Content-Type: application/json
+
+{
+    "amount": 20
+}

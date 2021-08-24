@@ -14,6 +14,9 @@ async function createAuctions(event, context) {
       id: uuid(),
       title,
       status: 'OPEN',
+      highestBid: {
+        amount: 0,
+      },
       created_at: now.toISOString(),
     }
 
