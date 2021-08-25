@@ -7,6 +7,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 async function getAuction(event) {
   logger.info('getAuction.start')
+
   try {
     const { id } = event.pathParameters
     const { AUCTIONS_TABLE_NAME: tableName } = process.env
@@ -34,4 +35,9 @@ async function getAuction(event) {
   }
 }
 
-export const handler = commonMiddleware(getAuction)
+const handler = commonMiddleware(getAuction)
+
+export {
+  handler as default,
+  handler,
+}

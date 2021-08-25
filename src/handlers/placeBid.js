@@ -43,4 +43,9 @@ async function placeBid(event) {
   }
 }
 
-export const handler = commonMiddleware(placeBid)
+const handler = commonMiddleware(placeBid)
+
+export {
+  handler as default,
+  handler,
+}

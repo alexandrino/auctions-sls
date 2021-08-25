@@ -1,12 +1,13 @@
 import { v4 as uuid } from 'uuid'
 import AWS from 'aws-sdk'
-import createError  from 'http-errors'
+import createError from 'http-errors'
 import commonMiddleware from '../lib/commonMiddleware'
+import logger from '../lib/logger'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-async function createAuctions(event, context) {
-  console.log('createAuctions.start')
+async function createAuctions(event) {
+  logger.info('createAuctions.start')
   try {
     const { title } = JSON.parse(event.body)
     const now = new Date()
@@ -26,17 +27,21 @@ async function createAuctions(event, context) {
     }).promise()
 
     const body = JSON.stringify({ auction })
-    console.log('createAuctions.success', body)
-  
+    logger.info('createAuctions.success', body)
+
     return {
       statusCode: 201,
       body,
     }
-  } catch(error) {
-    console.error('createAuctions.error', error)
+  } catch (error) {
+    logger.error('createAuctions.error', error)
     throw new createError.InternalServerError(error)
   }
 }
 
-export const handler = commonMiddleware(createAuctions)
+const handler = commonMiddleware(createAuctions)
 
+export {
+  handler as default,
+  handler,
+}
