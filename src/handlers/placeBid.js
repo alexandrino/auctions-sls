@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk'
-import createError from 'http-errors'
 import commonMiddleware from '../lib/commonMiddleware'
+import { getAuctionById } from './getAuction'
 import logger from '../lib/logger'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
@@ -15,6 +15,23 @@ async function placeBid(event) {
   })
 
   try {
+    const auctionData = await getAuctionById(id)
+    const { highestBid: { amount: currentAmount } } = auctionData
+
+
+    logger.info('placeBid.diff', {
+      id,
+      amount,
+      currentAmount,
+    })
+
+    if (amount <= currentAmount) {
+      return {
+        statusCode: 401,
+        body: `Your Bid must be higher than ${currentAmount}`,
+      }
+    }
+
     const { AUCTIONS_TABLE_NAME: tableName } = process.env
     const params = {
       TableName: tableName,
@@ -29,7 +46,7 @@ async function placeBid(event) {
     const result = await dynamodb.update(params).promise()
     const { Attributes: attributes } = result
 
-    logger.info('placeBids.success', id)
+    logger.info('placeBids.success', { id })
     return {
       statusCode: 200,
       body: JSON.stringify(attributes),
@@ -37,9 +54,11 @@ async function placeBid(event) {
   } catch (error) {
     logger.error('placeBid.error', {
       id,
-      error: JSON.stringify(error),
+      error,
     })
-    throw new createError.InternalServerError(error)
+    return {
+      statusCode: 500,
+    }
   }
 }
 

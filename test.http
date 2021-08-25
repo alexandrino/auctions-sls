@@ -17,5 +17,5 @@ PATCH https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/d633eb8
 Content-Type: application/json
 
 {
-    "amount": 30
+    "amount": 15
 }
