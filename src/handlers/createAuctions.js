@@ -11,6 +11,9 @@ async function createAuctions(event) {
   try {
     const { title } = JSON.parse(event.body)
     const now = new Date()
+    const endDate = new Date()
+    endDate.setHours(endDate.getHours() + 1)
+
     const auction = {
       id: uuid(),
       title,
@@ -19,6 +22,7 @@ async function createAuctions(event) {
         amount: 0,
       },
       created_at: now.toISOString(),
+      endingAt: endDate.toISOString(),
     }
 
     await dynamodb.put({
