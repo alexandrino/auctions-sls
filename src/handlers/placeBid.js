@@ -16,14 +16,25 @@ async function placeBid(event) {
 
   try {
     const auctionData = await getAuctionById(id)
-    const { highestBid: { amount: currentAmount } } = auctionData
-
+    const {
+      highestBid: {
+        amount: currentAmount,
+      },
+      status,
+    } = auctionData
 
     logger.info('placeBid.diff', {
       id,
       amount,
       currentAmount,
     })
+
+    if (status !== 'OPEN') {
+      return {
+        statusCode: 401,
+        body: 'You cannot bid on closed auctions',
+      }
+    }
 
     if (amount <= currentAmount) {
       return {
