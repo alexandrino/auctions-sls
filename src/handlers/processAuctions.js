@@ -7,10 +7,13 @@ async function processAuctions() {
   try {
     const auctions = await getEndedAuctions()
     const auctionsToClose = await Promise.all(auctions.map(closeAuction))
-
+    const auctionsClosed = auctionsToClose.length
     logger.info('processAuctions.success', {
-      auctionsClosed: auctionsToClose.length,
+      auctionsClosed,
     })
+    return {
+      auctionsClosed,
+    }
   } catch (error) {
     logger.error('processAuctions.error', {
       error,
