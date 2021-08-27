@@ -6,7 +6,7 @@ POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 
 
 ###
-GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
+GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions?status=CLOSED
 
 ###
 GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/e175a1a5-0fd9-4bf0-a21c-55762a619f03

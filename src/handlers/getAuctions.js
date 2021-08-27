@@ -5,14 +5,28 @@ import logger from '../lib/logger'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-async function getAuctions() {
+async function getAuctions(event) {
   logger.info('getAuctions.start')
 
   try {
     const { AUCTIONS_TABLE_NAME: tableName } = process.env
-    const result = await dynamodb.scan({
+    const { status = 'OPEN' } = event.queryStringParameters
+
+    const params = {
       TableName: tableName,
-    }).promise()
+      IndexName: 'statusAndEndDate',
+      KeyConditionExpression: '#status = :status',
+      ExpressionAttributeNames: {
+        '#status': 'status',
+      },
+      ExpressionAttributeValues: {
+        ':status': status,
+      },
+    }
+
+    const result = await dynamodb
+      .query(params)
+      .promise()
 
     const { Items: items } = result
     const response = {
