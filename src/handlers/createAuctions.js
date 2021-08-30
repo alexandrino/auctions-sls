@@ -13,6 +13,7 @@ async function createAuctions(event) {
   logger.info('createAuctions.start')
   try {
     const { title } = event.body
+    const { email } = event.requestContext.authorizer
     const now = new Date()
     const endDate = new Date()
     endDate.setHours(endDate.getHours() + 1)
@@ -26,6 +27,7 @@ async function createAuctions(event) {
       },
       created_at: now.toISOString(),
       endingAt: endDate.toISOString(),
+      seller: email,
     }
 
     await dynamodb.put({
