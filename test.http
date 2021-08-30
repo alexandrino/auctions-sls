@@ -1,4 +1,5 @@
 POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
+Authorization: Bearer xxx
 
 {
     "title": "New Auction 7"
@@ -6,7 +7,8 @@ POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 
 
 ###
-GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions?status=CLOSEDs
+GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions?status=CLOSED
+Authorization: Bearer xxx
 
 ###
 GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/e175a1a5-0fd9-4bf0-a21c-55762a619f03
@@ -19,3 +21,8 @@ Content-Type: application/json
 {
     "amount": 22
 }
+
+###
+
+POST https://vtt0lufvi4.execute-api.us-east-1.amazonaws.com/dev/private
+Authorization: Bearer xxx
