@@ -1,15 +1,18 @@
 import { v4 as uuid } from 'uuid'
 import AWS from 'aws-sdk'
 import createError from 'http-errors'
+import validator from '@middy/validator'
+
 import commonMiddleware from '../lib/commonMiddleware'
 import logger from '../lib/logger'
+import createAuctionSchema from '../lib/schemas/createAuctionSchema'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 async function createAuctions(event) {
   logger.info('createAuctions.start')
   try {
-    const { title } = JSON.parse(event.body)
+    const { title } = event.body
     const now = new Date()
     const endDate = new Date()
     endDate.setHours(endDate.getHours() + 1)
@@ -44,6 +47,13 @@ async function createAuctions(event) {
 }
 
 const handler = commonMiddleware(createAuctions)
+  .use(validator({
+    inputSchema: createAuctionSchema,
+    ajvOptions: {
+      useDefaults: true,
+      strict: false,
+    },
+  }))
 
 export {
   handler as default,

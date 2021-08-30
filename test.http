@@ -1,12 +1,12 @@
 POST https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions
 
 {
-    "title": "New Auction 4"
+    "title": "New Auction 7"
 }
 
 
 ###
-GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions?status=CLOSED
+GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auctions?status=CLOSEDs
 
 ###
 GET https://g2edc10u4d.execute-api.us-east-1.amazonaws.com/dev/auction/e175a1a5-0fd9-4bf0-a21c-55762a619f03
