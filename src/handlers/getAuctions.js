@@ -1,7 +1,9 @@
 import AWS from 'aws-sdk'
 import createError from 'http-errors'
+import validator from '@middy/validator'
 import commonMiddleware from '../lib/commonMiddleware'
 import logger from '../lib/logger'
+import getAuctionsSchema from '../lib/schemas/getAuctionSchema'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
@@ -10,7 +12,7 @@ async function getAuctions(event) {
 
   try {
     const { AUCTIONS_TABLE_NAME: tableName } = process.env
-    const { status = 'OPEN' } = event.queryStringParameters
+    const { status } = event.queryStringParameters
 
     const params = {
       TableName: tableName,
@@ -42,6 +44,13 @@ async function getAuctions(event) {
 }
 
 const handler = commonMiddleware(getAuctions)
+  .use(validator({
+    inputSchema: getAuctionsSchema,
+    ajvOptions: {
+      useDefaults: true,
+      strict: false,
+    },
+  }))
 
 export {
   handler as default,
