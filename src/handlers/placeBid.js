@@ -8,6 +8,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient()
 async function placeBid(event) {
   const { id } = event.pathParameters
   const { amount } = event.body
+  const { email } = event.requestContext.authorizer
 
   logger.info('placeBid.start', {
     id,
@@ -47,9 +48,10 @@ async function placeBid(event) {
     const params = {
       TableName: tableName,
       Key: { id },
-      UpdateExpression: 'set highestBid.amount = :amount',
+      UpdateExpression: 'set highestBid.amount = :amount, highestBid.bidder = :bidder',
       ExpressionAttributeValues: {
         ':amount': amount,
+        ':bidder': email,
       },
       ReturnValues: 'ALL_NEW',
     }
@@ -69,6 +71,7 @@ async function placeBid(event) {
     })
     return {
       statusCode: 500,
+      body: error.message,
     }
   }
 }
